@@ -1,20 +1,52 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<div (resized)="onResize($event)" class="wrapper">
+  <div (resized)="onHeaderResize($event)">
+    <div  class="mat-elevation-z5">
+      <mat-toolbar color="primary">
+        <h1>Kursach</h1>
+        <span class="spacer"></span>
+        <span class="button-row">
+      <mat-icon>person</mat-icon>
+      <span>User</span>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>person</mat-icon>
+          <span>Профиль</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Выход</span>
+        </button>
+      </mat-menu>
+    </span>
+      </mat-toolbar>
+    </div>
+  </div>
 
+
+  <mat-toolbar color="primary">
+    <span class="button-row">
+      <button  mat-button (click)="redirectToAddNewBook()">Добавить книгу</button>
+      <button  mat-button (click)="redirectToNew()">Новинки</button>
+      <button  mat-button (click)="redirectToBookShop()">Книги</button>
+      <button  mat-button>Контакты</button>
+    </span>
+    <span class="spacer"></span>
+    <mat-form-field class="input">
+      <input matInput placeholder="Поиск книги"/>
+      <button mat-button matSuffix  mat-icon-button>
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </mat-toolbar>
+
+  <div class="content" >
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="footer">
+
+  </div>
+</div>

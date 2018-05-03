@@ -1,0 +1,32 @@
+
+
+.mat-elevation-z5 {
+  position: relative;
+  z-index: 2;
+}
+
+.hide-overflow{
+  overflow: hidden;
+}
+
+.button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.content{
+  background-color: #303030;
+  padding: 22px 16px;
+  overflow: auto !important;
+  height: 77vh;
+}
+
+.input {
+  width: 300px;
+}
+
+:host /deep/ .mat-form-field {
+  font-size: 14px;
+}
+
