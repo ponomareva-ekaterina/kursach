@@ -59,3 +59,10 @@ body {
 .spacer {
   flex: 1 1 auto;
 }
+
+.content{
+  background-color: #303030;
+  padding: 22px 16px;
+  overflow: auto !important;
+  height: 77vh;
+}

@@ -9,9 +9,12 @@ export class BookListItemComponent implements OnInit {
 
   mouseEnter: boolean = false;
 
+  imgPlaceholderPath: string;
+
   constructor() { }
 
   ngOnInit() {
+    this.imgPlaceholderPath = `./assets/images/book-cover-placeholder.jpg`;
   }
 
 }

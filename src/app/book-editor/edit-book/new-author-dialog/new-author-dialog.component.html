@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Новый автор</h1>
+<div mat-dialog-content>
+  <form [formGroup]="data">
+    <mat-form-field class="input" >
+      <input matInput placeholder="Фамилия" formControlName="lastName"/>
+    </mat-form-field>
+    <mat-form-field class="input" >
+      <input matInput placeholder="Имя" formControlName="firstName"/>
+    </mat-form-field>
+    <mat-form-field class="input" >
+      <input matInput placeholder="Отчество" formControlName="middleName"/>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-icon-button [mat-dialog-close]="data" cdkFocusInitial>
+    <mat-icon>done</mat-icon>
+  </button>
+  <button mat-button mat-icon-button (click)="onNoClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+</div>

@@ -24,13 +24,6 @@
   background-color: #303030;
 }
 
-.popup-title{
-  position: absolute;
-  top:0;
-  opacity: 0.8;
-  background-color: #303030;
-}
-
 .button-row {
   opacity: 1 !important;
   display: flex;
@@ -40,4 +33,5 @@
 .button-row-item{
   margin-right: 4px;
 }
+
 

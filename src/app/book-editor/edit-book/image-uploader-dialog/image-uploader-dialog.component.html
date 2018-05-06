@@ -1,0 +1,13 @@
+<h1 mat-dialog-title="">Добавить обложку книги</h1>
+<div mat-dialog-content>
+  <image-upload
+    [max]="1"
+    (uploadFinished)="getImage($event)"
+  >
+  </image-upload>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-icon-button class="close-button" (click)="onNoClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

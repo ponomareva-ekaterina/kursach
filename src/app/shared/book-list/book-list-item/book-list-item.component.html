@@ -1,8 +1,30 @@
 <div class="book-tile">
   <div class="fill" (mouseenter)="mouseEnter = true" (mouseleave)="mouseEnter = false">
 
-    <div *ngIf="mouseEnter" class="popup-bar">
+    <mat-toolbar *ngIf="mouseEnter" class="popup-title">
+      <span>Book title</span>
+    </mat-toolbar>
 
-    </div>
+    <img
+      width="200px"
+      height="300px"
+      [src]="imgPlaceholderPath"/>
+
+    <mat-toolbar *ngIf="mouseEnter" class="popup-bar">
+      <div class="button-row">
+        <button mat-mini-fab color="primary" class="button-row-item">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" class="button-row-item">
+          <mat-icon>book</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" class="button-row-item">
+          <mat-icon>add_shopping_cart</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
   </div>
+
+
 </div>
+

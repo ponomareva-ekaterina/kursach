@@ -19,6 +19,7 @@ import {NoveltiesModule} from './novelties/novelties.module';
 import {BookShopModule} from './book-shop/book-shop.module';
 import {AngularResizedEventModule} from 'angular-resize-event/dist';
 import {BookEditorModule} from './book-editor/book-editor.module';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -37,8 +38,8 @@ import {BookEditorModule} from './book-editor/book-editor.module';
     AngularResizedEventModule,
     MatInputModule,
     MatFormFieldModule,
-    MatIconModule,
     BookEditorModule,
+    HttpClientModule,
     routing
   ],
   declarations: [
