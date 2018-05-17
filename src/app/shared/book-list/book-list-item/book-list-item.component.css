@@ -15,6 +15,7 @@
   min-width: 100%;
   min-height: 100%;
   position: relative;
+  max-height: 300px;
 }
 
 .popup-bar{
@@ -29,6 +30,18 @@
   top:0;
   opacity: 0.8;
   background-color: #303030;
+  display: block;
+  line-height: 2;
+}
+
+.book-title{
+  min-width: 168px;
+  max-width: 168px;
+  width: 168px;
+  font-size: 13px;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .button-row {

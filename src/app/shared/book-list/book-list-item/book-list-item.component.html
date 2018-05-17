@@ -2,24 +2,25 @@
   <div class="fill" (mouseenter)="mouseEnter = true" (mouseleave)="mouseEnter = false">
 
     <mat-toolbar *ngIf="mouseEnter" class="popup-title">
-      <span>Book title</span>
+      <div class="book-title">{{item?.name}}</div>
+      <div class="book-title">{{item?.author.getShortName()}}</div>
     </mat-toolbar>
 
     <img
       width="200px"
       height="300px"
-      [src]="imgPlaceholderPath"/>
+      [src]="domSanitizer.bypassSecurityTrustUrl(img)"/>
 
     <mat-toolbar *ngIf="mouseEnter" class="popup-bar">
       <div class="button-row">
-        <button mat-mini-fab color="primary" class="button-row-item">
+        <button mat-mini-fab color="primary" class="button-row-item" (click)="redirectToEditBook()">
           <mat-icon>edit</mat-icon>
         </button>
         <button mat-mini-fab color="primary" class="button-row-item">
-          <mat-icon>book</mat-icon>
+          <mat-icon>add_shopping_cart</mat-icon>
         </button>
         <button mat-mini-fab color="primary" class="button-row-item">
-          <mat-icon>add_shopping_cart</mat-icon>
+          <mat-icon>book</mat-icon>
         </button>
       </div>
     </mat-toolbar>

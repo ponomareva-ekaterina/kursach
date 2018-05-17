@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {BookList} from './book-list/book-list';
+import {BookListComponent} from './book-list/book-list.component';
 import { BookListItemComponent } from './book-list/book-list-item/book-list-item.component';
 import {MatButtonModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatToolbarModule} from '@angular/material';
 import { PageHeaderComponent } from './page-header/page-header.component';
+import {SpinnerModule} from 'angular2-spinner/dist';
 
 @NgModule({
   imports: [
@@ -13,13 +14,14 @@ import { PageHeaderComponent } from './page-header/page-header.component';
     MatInputModule,
     MatFormFieldModule,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    SpinnerModule
   ],
   exports: [
     BookListItemComponent,
-    BookList,
+    BookListComponent,
     PageHeaderComponent
   ],
-  declarations: [BookListItemComponent, BookList, PageHeaderComponent]
+  declarations: [BookListItemComponent, BookListComponent, PageHeaderComponent]
 })
 export class SharedModule { }

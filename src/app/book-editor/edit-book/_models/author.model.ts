@@ -1,5 +1,5 @@
 export class AuthorModel {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   middleName: string;
@@ -13,5 +13,13 @@ export class AuthorModel {
 
   getName(): string {
     return this.lastName + ' ' + this.firstName + ' ' + this.middleName;
+  }
+
+  getNameWithSeparators(): string{
+    return this.lastName + '-' + this.firstName + '-' + this.middleName;
+  }
+
+  getShortName(){
+    return this.lastName + ' ' + this.firstName[0] + '. ' + this.middleName[0] + '.';
   }
 }

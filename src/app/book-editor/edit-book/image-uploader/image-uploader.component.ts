@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {NewAuthorDialogComponent} from '../new-author-dialog/new-author-dialog.component';
-import {AuthorModel} from '../_models/author.model';
-import {FormGroup} from '@angular/forms';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ImageUploaderDialogComponent} from '../image-uploader-dialog/image-uploader-dialog.component';
 import {FileHolder} from 'angular2-image-upload';
@@ -17,6 +14,7 @@ export class ImageUploaderComponent implements OnInit {
 
   imgPlaceholderPath: string = `./assets/images/book-cover-placeholder.jpg`;
 
+  @Output() imageEvent = new EventEmitter<FileHolder>();
   image: FileHolder;
 
   imgSrc: string;
@@ -39,6 +37,7 @@ export class ImageUploaderComponent implements OnInit {
       result => {
         this.image = result;
         this.imgSrc = this.image.src;
+        this.imageEvent.emit(this.image);
       }
     );
   }

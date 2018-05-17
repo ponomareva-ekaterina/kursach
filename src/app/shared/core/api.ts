@@ -7,7 +7,7 @@ import {environment} from "../../../environments/environment";
 export class Api {
   protected baseUrl = environment.apiUrl; //url рест сервиса
 
-  protected readonly httpOptions = {
+  protected httpOptions = {
     headers: new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': 'true',

@@ -12,8 +12,8 @@ export class BookModel {
   constructor(data) {
     this.id = data.id;
     this.name = data.name;
-    this.author = data.author;
-    this.genre = data.genre;
+    this.author = new AuthorModel(data.author);
+    this.genre = new GenreModel(data.genre);
     this.publishDate = data.publishDate;
     this.copiesLeft = data.copiesLeft;
   }

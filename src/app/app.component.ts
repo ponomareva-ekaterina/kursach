@@ -32,9 +32,9 @@ export class AppComponent {
   onHeaderResize(event: ResizedEvent){
     this.headerHeight = event.newHeight;
   }
-  redirectToAddNewBook(){
-    this.router.navigate(['edit/book/new']);
-  }
+    redirectToAddNewBook(){
+      this.router.navigate(['edit/book/new']);
+    }
 
 
 }

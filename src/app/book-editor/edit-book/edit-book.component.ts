@@ -11,6 +11,10 @@ import {map, startWith} from 'rxjs/operators';
 import {AuthorService} from './_services/author.service';
 import {Router} from '@angular/router';
 import {BookService} from './_services/book.service';
+import {FileHolder} from 'angular2-image-upload';
+import {BookCoverService} from './_services/book-cover.service';
+import {HttpHeaders} from '@angular/common/http';
+import {BookModel} from './_models/book.model';
 
 export const RU_FORMAT = {
   parse: {
@@ -34,10 +38,13 @@ export const RU_FORMAT = {
     {provide: MAT_DATE_LOCALE, useValue: 'ru'},
     GenreService,
     AuthorService,
-    BookService
+    BookService,
+    BookCoverService
   ]
 })
 export class EditBookComponent implements OnInit {
+
+  imageFile: FileHolder;
 
   authorList: Array<AuthorModel> = new Array<AuthorModel>();
   filteredAuthors: Observable<any[]>;
@@ -60,6 +67,7 @@ export class EditBookComponent implements OnInit {
     private genreService: GenreService,
     private authorService: AuthorService,
     private bookService: BookService,
+    private bookCoverService: BookCoverService,
     private router: Router,
   ) {
 
@@ -170,12 +178,23 @@ export class EditBookComponent implements OnInit {
   }
 
   submit(){
+
     this.bookService.post(this.bookForm.value).subscribe(
-      () => {
-        //this.router.navigate(['new']);
+      (book) => {
         console.log('Успешно добавлено!');
-      }
-    );
+        this.bookCoverService.post(this.imageFile, new BookModel(book)).subscribe(
+          (response) =>{
+            console.log(response);
+            this.router.navigate(['new']);
+          }
+        );
+      });
+
+  }
+
+  onImageUpload(event){
+    this.imageFile = event;
+    console.log(this.imageFile);
   }
 }
 
