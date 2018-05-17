@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="create db structure" author="shemetova">
+    <sql>
+        /*==========================================================*/
+        /* создание схемы базы данных                               */
+        /*==========================================================*/
+        CREATE SCHEMA quest360; 
+
+        CREATE SEQUENCE quest360.s_type_survey_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* cправочник типов опросов: персональный, 360              */
+        /*==========================================================*/
+        CREATE TABLE quest360.s_type_survey(
+            s_type_survey_id               INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.s_type_survey_seq'),
+            survey_type                    VARCHAR(16)    NOT NULL,
+            CONSTRAINT pk_s_type_survey PRIMARY KEY (s_type_survey_id)
+        );
+
+        CREATE SEQUENCE quest360.s_type_question_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* справочник типов вопросов: открытый или ранжированный    */
+        /*==========================================================*/
+        CREATE TABLE quest360.s_type_question (
+            s_type_question_id             INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.s_type_question_seq'),
+            question_type                  VARCHAR(16)    NOT NULL,
+            CONSTRAINT pk_s_type_question PRIMARY KEY (s_type_question_id)
+        );
+
+        CREATE SEQUENCE quest360.s_status_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* справочник статусов опросов: запрошен или отклонен       */
+        /*==========================================================*/
+        CREATE TABLE quest360.s_status (
+            s_status_id                    INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.s_status_seq'),
+            status_type                    VARCHAR(16)   NOT NULL,
+            CONSTRAINT pk_s_status PRIMARY KEY (s_status_id)
+        );
+
+        CREATE SEQUENCE quest360.s_range_grade_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* справочник диапозонов оценок для отображения пиктограмм  */
+        /* в ЛК пользователя                                        */
+        /*==========================================================*/
+        CREATE TABLE quest360.s_range_grade (
+            s_range_grade_id               INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.s_range_grade_seq'),
+            min_limit                      INTEGER,
+            max_limit                      INTEGER,
+            CONSTRAINT pk_s_range_grade PRIMARY KEY (s_range_grade_id)
+        );
+
+        CREATE SEQUENCE quest360.s_access_survey_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* справочник уровней доступа для отображения ответов       */
+        /*==========================================================*/
+        CREATE TABLE quest360.s_access_survey(
+            s_access_survey_id             INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.s_access_survey_seq'),
+            access_survey                  VARCHAR(32),
+            CONSTRAINT pk_s_access_survey PRIMARY KEY (s_access_survey_id)
+        );
+
+        CREATE SEQUENCE quest360.department_seq 
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* структура отделов предприятия                            */
+        /*==========================================================*/
+        CREATE TABLE quest360.department (
+            department_id                  INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.department_seq'),
+            name_department                VARCHAR(64),
+            parent_department              INTEGER,
+            head_department                INTEGER, 
+            CONSTRAINT pk_department PRIMARY KEY (department_id)
+        );
+          CREATE SEQUENCE quest360.s_person_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* данные о сотруднике:                                     */
+        /* is_admin, is_head_department, is_head_company:           */
+        /* флаги для адиминистратора, руководителя отдела или       */
+        /* компании, по умолчанию каждый person - сотрудник         */
+        /* (для расширения прав флаги выше)                         */
+        /*==========================================================*/
+        CREATE TABLE quest360.person(
+            person_id                      INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.s_person_seq'),
+            username                       VARCHAR(16)    NOT NULL,
+            name                           VARCHAR(16),
+            middle_name                    VARCHAR(16),
+            surname                        VARCHAR(16), 
+            password                       VARCHAR(16),
+            department                     INTEGER,
+            position                       VARCHAR(32),
+            is_admin                       BOOLEAN,
+            is_head_department             BOOLEAN,
+            is_head_company                BOOLEAN, 
+            CONSTRAINT pk_person PRIMARY KEY (person_id),
+            CONSTRAINT department_fk FOREIGN KEY (department) REFERENCES quest360.department (department_id) MATCH SIMPLE 
+                ON UPDATE RESTRICT ON DELETE RESTRICT
+        );
+
+        CREATE SEQUENCE quest360.survey_id_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* данные об опросе:                                        */
+        /* start_date: дата начала опроса                           */
+        /* end_date: дата завершения этого опроса(общая)            */
+        /* period: период проведения опроса дней, недель, месяцев   */
+        /* type_survey: тип из справочника 360, персональный        */
+        /* access_survey: уровень доступа из справочника            */
+        /* publish: флаг публиковать или нет                        */
+        /* start_answer: срок старта ответов (цифра в днях)         */
+        /* stop_answer: срок завершения ответов                     */
+        /* date_publish: срок публикации ответов                    */
+        /*==========================================================*/
+        CREATE TABLE quest360.survey (
+            survey_id                      INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.survey_id_seq'),
+            survey_name                    VARCHAR(32),
+            start_date                     TIMESTAMP      NOT NULL,
+            end_date                       TIMESTAMP      NOT NULL,
+            period                         INTEGER,
+            type_survey                    INTEGER        NOT NULL,
+            access_survey                  INTEGER,
+            publish                        BOOLEAN,
+            start_answer                   INTEGER,
+            stop_answer                    INTEGER,
+            date_publish                   INTEGER,
+            CONSTRAINT pk_survey PRIMARY KEY (survey_id),
+            CONSTRAINT type_survey_fk_1 FOREIGN KEY (type_survey) REFERENCES quest360.s_type_survey (s_type_survey_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT,
+            CONSTRAINT access_survey_fk_2 FOREIGN KEY (access_survey) REFERENCES quest360.s_access_survey (s_access_survey_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT
+        );
+
+        CREATE SEQUENCE quest360.question_id_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* данные о вопросах:                                       */
+        /* type_question: тип вопроса из справочника                */
+        /* (открытый или ранжированный)                             */
+        /* num: порядковый номер вопроса в опросе                   */
+        /*==========================================================*/
+        CREATE TABLE quest360.question (
+            question_id                    INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.question_id_seq'),
+            text_question                  VARCHAR(512)   NOT NULL,
+            type_question                  INTEGER        NOT NULL,
+            num                            INTEGER,
+            survey_id                      INTEGER        NOT NULL,
+            CONSTRAINT pk_question PRIMARY KEY (question_id),
+            CONSTRAINT type_question_fk FOREIGN KEY (type_question) REFERENCES quest360.s_type_question (s_type_question_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT,
+            CONSTRAINT survey_fk FOREIGN KEY (survey_id) REFERENCES quest360.survey (survey_id) MATCH SIMPLE 
+                ON UPDATE RESTRICT ON DELETE RESTRICT 
+        );
+        
+        CREATE SEQUENCE quest360.current_survey_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* Данные о пройденных опросах                              */
+        /* current_survey_id: id текущего опроса для конкретного    */
+        /* пользователя и конкретной даты                           */
+        /* survey_id: id шаблона опроса                             */
+        /*==========================================================*/
+        CREATE TABLE quest360.current_survey (
+            current_survey_id              INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.current_survey_seq'),
+            survey_id                      INTEGER,
+            start_date                     TIMESTAMP,
+            status                         INTEGER,
+            CONSTRAINT pk_current_survey PRIMARY KEY (current_survey_id), 
+            CONSTRAINT survey_id_fk FOREIGN KEY (survey_id) REFERENCES quest360.survey (survey_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT,
+            CONSTRAINT status_fk FOREIGN KEY (status) REFERENCES quest360.s_status (s_status_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT
+        );
+        
+
+        CREATE SEQUENCE quest360.respondent_id_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* данные об отвечающем человеке:                           */
+        /* respondent: id отвещающего                               */
+        /* about_colleague: id о ком отвечают                       */
+        /*==========================================================*/
+        CREATE TABLE quest360.respondent_info (
+            respondent_info_id             INTEGER        NOT NULL    DEFAULT NEXTVAL ('quest360.respondent_id_seq'),
+            respondent_id                  INTEGER        NOT NULL,
+            about_colleague_id             INTEGER,
+            survey_id                      INTEGER        NOT NULL,
+            CONSTRAINT pk_respondent PRIMARY KEY (respondent_info_id),
+            CONSTRAINT respondent_fk_1 FOREIGN KEY (respondent_id) REFERENCES quest360.person (person_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT,
+            CONSTRAINT about_colleague_fk_2 FOREIGN KEY (about_colleague_id) REFERENCES quest360.person (person_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT,
+            CONSTRAINT survey_id_fk_3 FOREIGN KEY (survey_id) REFERENCES quest360.current_survey (current_survey_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT
+         );
+
+        CREATE SEQUENCE quest360.answer_id_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* данные об ответах:                                       */
+        /* answer: ответ на вопрос(текст, если                      */
+        /* question.type_question отрытый;                          */
+        /* число, если ранжированный)                               */
+        /* respondent: id того кто отвечает                         */
+        /* about_colleague: id о ком отвечают                       */
+        /*==========================================================*/
+        CREATE TABLE quest360.answer (
+            answer_id                      INTEGER        NOT NULL    DEFAULT NEXTVAL('quest360.answer_id_seq'),
+            survey_id                      INTEGER        NOT NULL,
+            question_id                    INTEGER,
+            answer                         VARCHAR(512),
+            respondent_id                  INTEGER,
+            about_colleague_id             INTEGER,
+            date_answer                    TIMESTAMP      NOT NULL,
+            CONSTRAINT pk_answer PRIMARY KEY (answer_id),
+            CONSTRAINT survey_id_fk_1 FOREIGN KEY (survey_id) REFERENCES quest360.current_survey (current_survey_id) MATCH SIMPLE
+               ON UPDATE RESTRICT ON DELETE RESTRICT,
+            CONSTRAINT about_colleague_fk_2 FOREIGN KEY (about_colleague_id) REFERENCES quest360.person (person_id) MATCH SIMPLE
+               ON UPDATE RESTRICT ON DELETE RESTRICT,
+            CONSTRAINT question_id_fk_3 FOREIGN KEY (question_id) REFERENCES quest360.question (question_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT,
+            CONSTRAINT respondent_fk_4 FOREIGN KEY (respondent_id) REFERENCES quest360.person (person_id) MATCH SIMPLE
+                ON UPDATE RESTRICT ON DELETE RESTRICT
+        );
+
+        /*==========================================================*/
+        /* Хранятся данные о сотрудниках, которых можно назначить на опрос */
+        /*==========================================================*/
+        CREATE TABLE quest360.survey_person (
+            survey_id                      INTEGER        NOT NULL,
+            person_id                      INTEGER        NOT NULL,
+            CONSTRAINT survey_id_fk_1 FOREIGN KEY (survey_id) REFERENCES quest360.survey (survey_id) MATCH FULL,
+            CONSTRAINT person_id_fk_2 FOREIGN KEY (person_id) REFERENCES quest360.person (person_id) MATCH FULL
+        );
+
+
+        CREATE SEQUENCE quest360.statistic_person_survey_seq
+        INCREMENT BY  1
+        MINVALUE      1
+        MAXVALUE      2147483647
+        CACHE         1;
+
+        /*==========================================================*/
+        /* данные о статистике пользователя в конкретном опросе:    */
+        /* survey_date: дата конкретного опроса                     */
+        /* feedback: отзыв, заполняет руководитель для              */
+        /* конкретного опроса                                       */
+        /* average: среднее занчение оценок для опроса              */
+        /* normalized: нормализированное значение оценок для опроса */
+        /* corrected: скорретированное руководителем                */
+        /*==========================================================*/
+        CREATE TABLE quest360.statistic_person_survey (
+            statistic_person_survey_id     INTEGER        NOT NULL    DEFAULT NEXTVAL('quest360.statistic_person_survey_seq'),
+            person_id                      INTEGER        NOT NULL,
+            survey_id                      INTEGER        NOT NULL,
+            survey_date                    TIMESTAMP      NOT NULL,
+            feedback                       VARCHAR(256),
+            average                        REAL,
+            normalized                     REAL,
+            corrected                      REAL,
+            CONSTRAINT pk_statistic_person_survey PRIMARY KEY (statistic_person_survey_id),
+            CONSTRAINT survey_id_fk_1 FOREIGN KEY (survey_id) REFERENCES quest360.current_survey (current_survey_id) MATCH FULL,
+            CONSTRAINT person_id_fk_2 FOREIGN KEY (person_id) REFERENCES quest360.person (person_id) MATCH FULL
+        );
+        
+        ALTER TABLE quest360.department 
+            ADD CONSTRAINT parent_department_fk FOREIGN KEY (parent_department) REFERENCES quest360.department (department_id) MATCH SIMPLE 
+                ON UPDATE RESTRICT ON DELETE RESTRICT;
+    </sql>
+    <rollback>
+        <dropTable tableName="s_type_survey"/>
+        <dropTable tableName="s_type_question"/>
+        <dropTable tableName="s_status"/>
+        <dropTable tableName="s_range_grade"/>
+        <dropTable tableName="s_access_survey"/>
+        <dropTable tableName="department"/>
+        <dropTable tableName="person"/>
+        <dropTable tableName="survey"/>
+        <dropTable tableName="question"/>
+        <dropTable tableName="respondent_info"/> 
+        <dropTable tableName="answer"/>
+        <dropTable tableName="current_survey"/>
+        <dropTable tableName="survey_person"/>
+        <dropTable tableName="statistic_person_survey"/>
+    </rollback>
+  </changeSet>
+  
+
+</databaseChangeLog>

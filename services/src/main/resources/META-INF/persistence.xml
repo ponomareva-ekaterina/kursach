@@ -1,0 +1,40 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+    version="2.0">
+    <persistence-unit name="persistence" transaction-type="JTA">
+        <!-- Persistence provider -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Entity classes -->
+        <class>ru.katrine.bookshop.model.UserModel</class>
+        <class>ru.katrine.bookshop.model.GenreModel</class>
+        <class>ru.katrine.bookshop.model.BookStatusModel</class>
+        <class>ru.katrine.bookshop.model.AuthorModel</class>
+        <class>ru.katrine.bookshop.model.BookModel</class>
+        <class>ru.katrine.bookshop.model.BoughtBookModel</class>
+
+        <properties>
+            <!-- DB Driver -->
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+
+            <!-- The JDBC URL to the database instance -->
+            <property name="javax.persistence.jdbc.url"
+                value="jdbc:postgresql://localhost:5432/posgres"/>
+
+            <!-- The database username -->
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+
+            <!-- The database password -->
+            <property name="javax.persistence.jdbc.password" value="gjyjvfhtdf7"/>
+            <property name="hibernate.show_sql" value = "true" />
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.default_schema" value="kursach"/>
+            <!-- DB Dialect -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL94Dialect"/>
+
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+        </properties>
+    </persistence-unit>
+</persistence>

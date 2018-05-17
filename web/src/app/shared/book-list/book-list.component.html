@@ -1,0 +1,12 @@
+<ng-container *ngIf="data; then showList else loading"></ng-container>
+<ng-template #loading>
+  <spinner class="spinner" [size]="100" [tickness]="4" color="#ff66ff"></spinner>
+</ng-template>
+<ng-template #showList>
+  <mat-grid-list [cols]="cols" rowHeight="340px">
+    <mat-grid-tile *ngFor="let item of data.bookList">
+      <app-book-list-item [item]="item"></app-book-list-item>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-template>
+

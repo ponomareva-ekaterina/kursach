@@ -1,0 +1,32 @@
+.image-wrapper{
+  float: left;
+  width: 300px;
+  height: 400px;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.form-wrapper{
+  min-width: 300px;
+  width: 60%;
+  float: left;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.input{
+  width: 50%;
+}
+
+:host /deep/ .mat-form-field.input {
+  font-size: 18px;
+}
+
+.bottom-toolbar{
+  background-color: #303030;
+}
+
+.button-container{
+  position: relative;
+  left: 40%;
+}

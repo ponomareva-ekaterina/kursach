@@ -1,0 +1,56 @@
+.book-tile{
+  min-width: 200px;
+  max-width: 200px;
+  width: 200px;
+  min-height: 100px;
+  max-height: 300px;
+  height: 300px;
+
+  margin: 22px 16px;
+
+}
+
+.fill{
+  background-color: white;
+  min-width: 100%;
+  min-height: 100%;
+  position: relative;
+  max-height: 300px;
+}
+
+.popup-bar{
+  position: absolute;
+  bottom: 0;
+  opacity: 0.8;
+  background-color: #303030;
+}
+
+.popup-title{
+  position: absolute;
+  top:0;
+  opacity: 0.8;
+  background-color: #303030;
+  display: block;
+  line-height: 2;
+}
+
+.book-title{
+  min-width: 168px;
+  max-width: 168px;
+  width: 168px;
+  font-size: 13px;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button-row {
+  opacity: 1 !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.button-row-item{
+  margin-right: 4px;
+}
+

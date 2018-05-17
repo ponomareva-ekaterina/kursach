@@ -1,0 +1,39 @@
+<div class="wrapper">
+  <div  class="mat-elevation-z5">
+    <mat-toolbar color="primary">
+      <h1>Kursach</h1>
+      <span class="button-row">
+        <button  mat-button (click)="redirectToAddNewBook()">Добавить книгу</button>
+        <button  mat-button (click)="redirectToNew()">Новинки</button>
+        <button  mat-button (click)="redirectToBookShop()">Книги</button>
+        <button  mat-button>Контакты</button>
+      </span>
+      <span class="spacer"></span>
+      <span class="button-row">
+          <mat-icon>person</mat-icon>
+          <span>User</span>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>person</mat-icon>
+              <span>Профиль</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>shopping_cart</mat-icon>
+              <span>Корзина</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Выход</span>
+            </button>
+          </mat-menu>
+        </span>
+    </mat-toolbar>
+  </div>
+
+
+  <router-outlet></router-outlet>
+
+</div>
